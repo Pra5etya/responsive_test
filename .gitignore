@@ -1,0 +1,12 @@
+# Environment
+win_env
+
+# App
+app/__pycache__
+app/routes/__pycache__
+
+# Config
+config/__pycache__
+
+# Log
+logs

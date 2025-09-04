@@ -1,0 +1,52 @@
+<div class="flex">
+  <!-- Sidebar untuk desktop -->
+  <aside id="sidebar"
+    class="hidden sm:block bg-gray-800 text-white w-64 p-4">
+    <ul>
+      <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-700 rounded">Home</a></li>
+      <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-700 rounded">Profile</a></li>
+      <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-700 rounded">Settings</a></li>
+    </ul>
+  </aside>
+</div>
+
+<!-- Bottom Navigation untuk mobile -->
+<nav class="sm:hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white flex justify-around p-2 shadow-lg z-20">
+  <button class="nav-btn" data-target="home">🏠 Home</button>
+  <button class="nav-btn" data-target="profile">👤 Profile</button>
+  <button class="nav-btn" data-target="settings">⚙️ Settings</button>
+</nav>
+
+<!-- Popup menu (muncul saat klik di mobile) -->
+<div id="mobile-menu"
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30 transition-transform duration-300">
+  <ul id="menu-items" class="text-gray-800"></ul>
+</div>
+
+<script>
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const menu = document.getElementById('mobile-menu');
+  const menuItems = document.getElementById('menu-items');
+
+  // daftar isi menu untuk tiap tombol
+  const menus = {
+    home: ['Dashboard', 'News', 'Events'],
+    profile: ['View Profile', 'Edit Profile', 'Logout'],
+    settings: ['General', 'Privacy', 'Notifications']
+  };
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      const items = menus[target];
+
+      // isi ulang menu sesuai tombol yang diklik
+      menuItems.innerHTML = items
+        .map(i => `<li class="p-2 border-b last:border-none">${i}</li>`)
+        .join("");
+
+      // toggle tampilkan / sembunyikan
+      menu.classList.toggle('hidden');
+    });
+  });
+</script>

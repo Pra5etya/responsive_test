@@ -1,0 +1,25 @@
+{% extends 'component/base.html' %}
+
+{% block title %} Index HTML {% endblock %}
+
+{% block content %}
+<body class="bg-gray-100 min-h-screen" id="result">
+    <div class="flex flex-col sm:flex-row w-full h-full">
+
+        {% include 'component/sidebar.html' %}
+        {% include 'index/content.html' %}
+    
+    </div>
+
+    <!-- Script untuk toggle -->
+    <!-- <script>
+        const menuBtn = document.getElementById("menu-btn");
+        const sidebar = document.getElementById("sidebar");
+
+        menuBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("hidden");
+        });
+    </script> -->
+</body>
+
+{% endblock %}
