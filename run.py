@@ -4,5 +4,5 @@ if __name__ == "__main__":
     app = create_app()
 
     app.run(debug = True, 
-            host = 'localhost', 
+            host = '0.0.0.0', 
             port = 5000)

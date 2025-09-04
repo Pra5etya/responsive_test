@@ -12,41 +12,76 @@
 
 <!-- Bottom Navigation untuk mobile -->
 <nav class="sm:hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white flex justify-around p-2 shadow-lg z-20">
-  <button class="nav-btn" data-target="home">🏠 Home</button>
+  <button class="nav-btn" data-target="filter">🛒 Filter</button>
   <button class="nav-btn" data-target="profile">👤 Profile</button>
-  <button class="nav-btn" data-target="settings">⚙️ Settings</button>
+  <button class="nav-btn" data-target="widget">📅 Widget</button>
 </nav>
 
-<!-- Popup menu (muncul saat klik di mobile) -->
-<div id="mobile-menu"
-  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30 transition-transform duration-300">
-  <ul id="menu-items" class="text-gray-800"></ul>
+<!-- Overlay gelap (klik di luar akan menutup popup) -->
+<div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-40 z-20"></div>
+
+<!-- Popup: Filter -->
+<div id="popup-filter"
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30">
+  <h3 class="font-bold mb-2">Filter / Kategori</h3>
+  <ul class="text-gray-800">
+    <li class="p-2 border-b">Harga</li>
+    <li class="p-2 border-b">Kategori</li>
+    <li class="p-2">Brand</li>
+  </ul>
+</div>
+
+<!-- Popup: Profile -->
+<div id="popup-profile"
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30">
+  <h3 class="font-bold mb-2">Informasi Profil Pengguna</h3>
+  <ul class="text-gray-800">
+    <li class="p-2 border-b">Edit</li>
+    <li class="p-2 border-b">Setting</li>
+    <li class="p-2">Logout</li>
+  </ul>
+</div>
+
+<!-- Popup: Widget -->
+<div id="popup-widget"
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30">
+  <h3 class="font-bold mb-2">Widget / Informasi Tambahan</h3>
+  <ul class="text-gray-800">
+    <li class="p-2 border-b">Kalender</li>
+    <li class="p-2">Jam</li>
+  </ul>
 </div>
 
 <script>
   const navBtns = document.querySelectorAll('.nav-btn');
-  const menu = document.getElementById('mobile-menu');
-  const menuItems = document.getElementById('menu-items');
-
-  // daftar isi menu untuk tiap tombol
-  const menus = {
-    home: ['Dashboard', 'News', 'Events'],
-    profile: ['View Profile', 'Edit Profile', 'Logout'],
-    settings: ['General', 'Privacy', 'Notifications']
-  };
+  const popups = document.querySelectorAll('[id^="popup-"]');
+  const overlay = document.getElementById('overlay');
 
   navBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-target');
-      const items = menus[target];
 
-      // isi ulang menu sesuai tombol yang diklik
-      menuItems.innerHTML = items
-        .map(i => `<li class="p-2 border-b last:border-none">${i}</li>`)
-        .join("");
+      // Sembunyikan semua popup dulu
+      popups.forEach(p => p.classList.add('hidden'));
 
-      // toggle tampilkan / sembunyikan
-      menu.classList.toggle('hidden');
+      // Tampilkan popup sesuai tombol
+      const popup = document.getElementById(`popup-${target}`);
+      if (popup) {
+        popup.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+      }
     });
+  });
+
+  // Klik overlay = tutup semua popup
+  overlay.addEventListener('click', () => {
+    popups.forEach(p => p.classList.add('hidden'));
+    overlay.classList.add('hidden');
+  });
+
+  // Tutup popup saat scroll
+  window.addEventListener('scroll', () => {
+    popups.forEach(p => p.classList.add('hidden'));
+    overlay.classList.add('hidden');
   });
 </script>
