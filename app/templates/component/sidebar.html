@@ -1,28 +1,33 @@
 <div class="flex">
   <!-- Sidebar untuk desktop -->
-  <aside id="sidebar"
-    class="hidden sm:block bg-gray-800 text-white w-64 p-4">
+  <aside id="sidebar" class="hidden sm:block bg-gray-800 text-white w-64 p-4">
     <ul>
-      <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-700 rounded">Home</a></li>
-      <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-700 rounded">Profile</a></li>
-      <li class="mb-2"><a href="#" class="block p-2 hover:bg-gray-700 rounded">Settings</a></li>
+      <li class="mb-2"><a href="/" class="block p-2 hover:bg-gray-700 rounded">Home</a></li>
+      <li class="mb-2"><a href="/about" class="block p-2 hover:bg-gray-700 rounded">Profile</a></li>
+      <li class="mb-2"><a href="/services" class="block p-2 hover:bg-gray-700 rounded">Settings</a></li>
+      {% if role == "admin" %}
+        <li class="mb-2"><a href="/portfolio" class="block p-2 bg-yellow-600 rounded">Dashboard</a></li>
+      {% endif %}
     </ul>
   </aside>
 </div>
 
 <!-- Bottom Navigation untuk mobile -->
-<nav class="sm:hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white flex justify-around p-2 shadow-lg z-20">
+<nav class="sm:hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white flex justify-around p-2 shadow-lg z-40">
   <button class="nav-btn" data-target="filter">🛒 Filter</button>
   <button class="nav-btn" data-target="profile">👤 Profile</button>
   <button class="nav-btn" data-target="widget">📅 Widget</button>
+  {% if role == "admin" %}
+    <button class="nav-btn" data-target="admin">⚙️ Admin</button>
+  {% endif %}
 </nav>
 
-<!-- Overlay gelap (klik di luar akan menutup popup) -->
-<div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-40 z-20"></div>
+<!-- Overlay -->
+<div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-40 z-30"></div>
 
 <!-- Popup: Filter -->
 <div id="popup-filter"
-  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30">
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-50">
   <h3 class="font-bold mb-2">Filter / Kategori</h3>
   <ul class="text-gray-800">
     <li class="p-2 border-b">Harga</li>
@@ -33,7 +38,7 @@
 
 <!-- Popup: Profile -->
 <div id="popup-profile"
-  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30">
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-50">
   <h3 class="font-bold mb-2">Informasi Profil Pengguna</h3>
   <ul class="text-gray-800">
     <li class="p-2 border-b">Edit</li>
@@ -44,7 +49,7 @@
 
 <!-- Popup: Widget -->
 <div id="popup-widget"
-  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-30">
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-50">
   <h3 class="font-bold mb-2">Widget / Informasi Tambahan</h3>
   <ul class="text-gray-800">
     <li class="p-2 border-b">Kalender</li>
@@ -52,36 +57,111 @@
   </ul>
 </div>
 
+<!-- Popup: Admin (Role Akses) -->
+{% if role == "admin" %}
+<div id="popup-admin"
+  class="hidden fixed bottom-12 left-0 right-0 bg-white shadow-lg rounded-t-xl p-4 z-50">
+  <h3 class="font-bold mb-2">Admin Panel</h3>
+  <ul class="text-gray-800">
+    <li class="p-2 border-b">Dashboard</li>
+    <li class="p-2 border-b">Manage Users</li>
+    <li class="p-2">Reports</li>
+  </ul>
+</div>
+{% endif %}
+
+
+<style>
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+
+  .popup-show {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  .popup-hide {
+    animation: slideDown 0.25s ease-in forwards;
+  }
+</style>
+
 <script>
   const navBtns = document.querySelectorAll('.nav-btn');
   const popups = document.querySelectorAll('[id^="popup-"]');
   const overlay = document.getElementById('overlay');
 
+  /**
+   * Utility: buka popup dengan animasi
+   */
+  function openPopup(popup) {
+    if (!popup) return;
+
+    popup.classList.remove('hidden', 'popup-hide');
+    popup.classList.add('popup-show');
+    overlay.classList.remove('hidden');
+  }
+
+  /**
+   * Utility: tutup semua popup dengan animasi
+   */
+  function closePopups() {
+    popups.forEach(popup => {
+      if (!popup.classList.contains('hidden')) {
+        popup.classList.remove('popup-show');
+        popup.classList.add('popup-hide');
+
+        popup.addEventListener(
+          'animationend',
+          () => {
+            popup.classList.add('hidden');
+            popup.classList.remove('popup-hide');
+          },
+          { once: true }
+        );
+      }
+    });
+    overlay.classList.add('hidden');
+  }
+
+  /**
+   * Event Listener tombol navigasi
+   */
   navBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-target');
+      const targetId = `popup-${btn.dataset.target}`;
+      const popup = document.getElementById(targetId);
 
-      // Sembunyikan semua popup dulu
-      popups.forEach(p => p.classList.add('hidden'));
-
-      // Tampilkan popup sesuai tombol
-      const popup = document.getElementById(`popup-${target}`);
-      if (popup) {
-        popup.classList.remove('hidden');
-        overlay.classList.remove('hidden');
+      // Toggle jika popup sedang terbuka
+      if (popup && !popup.classList.contains('hidden')) {
+        closePopups();
+      } else {
+        closePopups();
+        openPopup(popup);
       }
     });
   });
 
-  // Klik overlay = tutup semua popup
-  overlay.addEventListener('click', () => {
-    popups.forEach(p => p.classList.add('hidden'));
-    overlay.classList.add('hidden');
-  });
-
-  // Tutup popup saat scroll
-  window.addEventListener('scroll', () => {
-    popups.forEach(p => p.classList.add('hidden'));
-    overlay.classList.add('hidden');
-  });
+  /**
+   * Event Listener global (overlay & scroll)
+   */
+  overlay.addEventListener('click', closePopups);
+  window.addEventListener('scroll', closePopups);
 </script>

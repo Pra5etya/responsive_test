@@ -3,23 +3,44 @@
 {% block title %} Index HTML {% endblock %}
 
 {% block content %}
-<body class="bg-gray-100 min-h-screen" id="result">
+<body class="bg-gray-100 min-h-screen p-0" id="result">
     <div class="flex flex-col sm:flex-row w-full h-full">
-
         {% include 'component/sidebar.html' %}
-        {% include 'index/content.html' %}
-    
+        
+        <div class="flex flex-row flex-1 h-full">
+            {% include 'index/section1.html' %}
+            {% include 'index/section2.html' %}
+        </div>
+
+        <div class="flex flex-row flex-1 h-full">
+            {% include 'index/section3.html' %}
+            {% include 'index/section4.html' %}
+        </div>
     </div>
 
-    <!-- Script untuk toggle -->
-    <!-- <script>
-        const menuBtn = document.getElementById("menu-btn");
-        const sidebar = document.getElementById("sidebar");
+    <div class="flex flex-col w-full h-full">
+        <h1 class="text-2xl font-bold m-4">Another Section</h1>
 
-        menuBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("hidden");
-        });
-    </script> -->
+        <div class="flex flex-row flex-1 h-full">
+            {% include 'index/section1.html' %}
+            {% include 'index/section2.html' %}
+        </div>
+
+        <div class="flex flex-row flex-1 h-full">
+            {% include 'index/section3.html' %}
+            {% include 'index/section4.html' %}
+        </div>
+
+        <div class="flex flex-row flex-1 h-full">
+            {% include 'index/section5.html' %}
+            {% include 'index/section6.html' %}
+        </div>
+
+        <div class="flex flex-row flex-1 h-full">
+            {% include 'index/section7.html' %}
+            {% include 'index/section8.html' %}
+        </div>
+    </div>    
 </body>
 
 {% endblock %}

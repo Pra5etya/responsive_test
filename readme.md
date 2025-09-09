@@ -53,3 +53,7 @@ pip instal Flask
 
 4. Dropdown menu di header
     * Kalau menunya sedikit, pindahkan ke menu dropdown di header.
+
+# Note
+
+1. Penggunaan navbar mobile untuk dropdown sebaiknya warnanya disesuaikan dengan navbar asli atau tidak?
