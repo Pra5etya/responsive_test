@@ -56,4 +56,4 @@ pip instal Flask
 
 # Note
 
-1. Penggunaan navbar mobile untuk dropdown sebaiknya warnanya disesuaikan dengan navbar asli atau tidak?
+1. penggunaan hover pada mobile sebaiknya tidak diterapkan

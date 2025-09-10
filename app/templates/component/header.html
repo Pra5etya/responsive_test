@@ -10,10 +10,10 @@
 
       <!-- Menu (Desktop) - hanya muncul di layar >= sm -->
       <nav class="hidden sm:flex space-x-6">
-        <a href="/" class="hover:text-gray-200">Home</a>
-        <a href="/about" class="hover:text-gray-200">About</a>
-        <a href="/services" class="hover:text-gray-200">Services</a>
-        <a href="/contact" class="hover:text-gray-200">Contact</a>
+        <a href="/" class="hover:underline">Home</a>
+        <a href="/about" class="hover:underline">About</a>
+        <a href="/services" class="hover:underline">Services</a>
+        <a href="/contact" class="hover:underline">Contact</a>
 
         <!-- Role akses hanya muncul jika user = admin -->
         {% if role == "admin" %}
